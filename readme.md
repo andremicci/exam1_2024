@@ -36,7 +36,17 @@ data = [
 ]
 ```
 
-Data can be found at the following [link](https://drive.google.com/file/d/1eAPddVmDSJTyZRDChdtjYjrW4bya6x_B/view?usp=sharing)
+A pictorial representation of a sample class $0$ sequence is
+
+![Alt Text](class_0_sample.png)
+
+while a pictorial representation of a sample class $1$ sequence is
+
+![Alt Text](class_1_sample.png)
+
+Blue pixels represent the hottest cable at each step. Green pixels represent quenching cables.
+
+Data can be downloaded from the following [link](https://drive.google.com/file/d/1eAPddVmDSJTyZRDChdtjYjrW4bya6x_B/view?usp=sharing)
 
 ## Objective
 
