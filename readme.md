@@ -61,6 +61,8 @@ A Jupiter notebook containing the following:
 
 The notebook should be sufficiently documented (code annotation and explanation of the various steps) and should be delivered to the exam committee at least $5$ days before the oral exam.
 
+There is no restriction on the software; you can use PyTorch, TensorFlow, Keras, or whichever you prefer.
+
 ## Evaluation Criteria
 
 - Justification of the choices made in model design and optimization
