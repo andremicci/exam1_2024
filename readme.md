@@ -8,9 +8,9 @@ Despite the cables being isolated and separately cooled, the heat exchange among
 
 ## Data description
 
-Data are sequences of heat maps of the cables grid. As already mentioned, the grid is $15\times 15$ dimensional and the sequences contain $24$ measurements. 
+The input data are sequences of heat maps of the cables grid. As already mentioned, the grid is $15\times 15$ dimensional and the sequences contain $24$ measurements. 
 
-The first label, with values $0$ and $1$, indicates the category corresponding to no-quenches or at least one quench, respectively. Moreover, for sequences belonging to category $1$, additional labels are available representing the coordinates of the quenches $(t,x,y)$ with $t$ the step in the sequence, and $(x,y)$ the coordinates in the grid.
+A set of truth labels are also given to build supervised tasks. The first label, with values $0$ and $1$, indicates the category corresponding to no-quenches or at least one quench, respectively. Moreover, for sequences belonging to category $1$, additional labels are available representing the coordinates of the quenches $(t,x,y)$ with $t$ the step in the sequence, and $(x,y)$ the coordinates in the grid.
 
 Available data are $3000$ labeled sequences of heat maps in the form of a python dictionary with the following structure:
 
