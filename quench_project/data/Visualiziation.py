@@ -8,8 +8,7 @@ def visualize_sequence(data,quenched=False,debug=False):
     Visualizza una sequenza di mappa di calore a tempo per tempo.
     sequence: numpy array
         La sequenza di mappe di calore (formato: (24, 15, 15)).
-    title: str
-        Titolo della visualizzazione.
+   
     """
     if quenched:
          filtered_data = data[data['label'] == 1]

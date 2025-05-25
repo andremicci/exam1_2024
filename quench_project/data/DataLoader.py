@@ -1,17 +1,19 @@
 import json
 import os
 import pandas as pd
+import numpy as np
 
 
 class DataLoader:
 
-    def __init__(self, path):
+    def __init__(self, path, reshape_to_2d=True):
         """
         Args:
             path (str): percorso del file JSON
         """
         self.path = path
         self.data = None
+        self.reshape_to_2d = True
 
     def load_data(self):
         """
@@ -34,6 +36,12 @@ class DataLoader:
             raise ValueError("Data not loaded. Please call load_data() first.")
         
         self.data = pd.DataFrame(self.data)
+
+        if self.reshape_to_2d:
+            self.data['sequence'] = self.data['sequence'].apply(np.array)
+            self.data['sequence'] = self.data['sequence'].apply(lambda x: np.reshape(x, (24, 15, 15)))
+            self.data['sequence'] = self.data['sequence'].apply(lambda x: np.transpose(x, (0, 2, 1)))
+            
         return self.data
     
     
