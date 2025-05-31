@@ -41,7 +41,9 @@ class DataLoader:
             self.data['sequence'] = self.data['sequence'].apply(np.array)
             self.data['sequence'] = self.data['sequence'].apply(lambda x: np.reshape(x, (24, 15, 15)))
             self.data['sequence'] = self.data['sequence'].apply(lambda x: np.transpose(x, (0, 2, 1)))
-            
+        
+        
+        self.data['num_quench']= self.data[self.data.label==1]['quench'].apply(lambda x: len(x))
         return self.data
     
     

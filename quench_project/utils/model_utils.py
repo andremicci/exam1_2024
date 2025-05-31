@@ -1,7 +1,8 @@
 def count_parameters(model):
     total = sum(p.numel() for p in model.parameters())
     trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    return total, trainable
+    print(f'Total parameters: {total}, Trainable parameters: {trainable}')
+    return None
 
 
 def reset_weights(m):
