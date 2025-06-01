@@ -2,7 +2,7 @@ import seaborn as sns
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 
-def plot_confusion_matrix(y_true, y_pred, labels=None, title="Confusion Matrix"):
+def plot_confusion_matrix(y_true, y_pred, classes=None, title="Confusion Matrix"):
     """
     Plot a confusion matrix with counts in each cell.
 
@@ -12,10 +12,10 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, title="Confusion Matrix")
     - labels: list of label names, optional
     - title: title of the plot
     """
-    cm = confusion_matrix(y_true, y_pred)
-    plt.figure(figsize=(5, 4))
+    cm = confusion_matrix(y_true, y_pred,labels=classes)
+    plt.figure(figsize=(9, 8))
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', 
-                xticklabels=labels, yticklabels=labels)
+                xticklabels=classes, yticklabels=classes)
     plt.xlabel('Predicted')
     plt.ylabel('True')
     plt.title(title)
