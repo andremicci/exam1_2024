@@ -10,6 +10,9 @@ You can run this project either **locally on the TeoGPU cluster (recommended)** 
 > ✅ Best for fast training with direct access to local files
 
 1. Clone the project or access it from your user folder.
+```python
+git clone https://github.com/andremicci/exam1_2024.git
+```
 2. Open the project folder in **VSCode**.
 3. Set the **Jupyter kernel** to the pre-configured Conda environment: amilici_exam
 
