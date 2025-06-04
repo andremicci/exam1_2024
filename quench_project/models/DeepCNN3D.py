@@ -9,22 +9,22 @@ class DeepCNN3D(nn.Module):
         # Input shape: (batch, 1, 24, 15, 15) — 1 canale (ad esempio)
         
         self.layer1 = nn.Sequential(
-            nn.Conv3d(1, 32, kernel_size=3, padding=1),
-            nn.Dropout(0.3),  
+            nn.Conv3d(1, 32, kernel_size=3, padding=1), 
             nn.ReLU(),
+            nn.BatchNorm3d(32),
             nn.MaxPool3d(kernel_size=2, stride=2)  # dimezza depth, height, width
         )
         
         self.layer2 = nn.Sequential(
             nn.Conv3d(32, 64, kernel_size=3, padding=1),
-            nn.Dropout(0.3),
+            nn.BatchNorm3d(64),
             nn.ReLU(),
             nn.MaxPool3d(kernel_size=2, stride=2)
         )
         
         self.layer3 = nn.Sequential(
             nn.Conv3d(64, 128, kernel_size=3, padding=1),
-            nn.Dropout(0.4),
+            nn.Dropout(0.5),
             nn.ReLU(),
             nn.MaxPool3d(kernel_size=2, stride=2)
         )

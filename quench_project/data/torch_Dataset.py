@@ -3,7 +3,7 @@ from torch.utils.data import Dataset
 import numpy as np
 
 
-class torch_Dataset(Dataset):
+class torch_Dataset_task1(Dataset):
     def __init__(self, data):
         
         sequences = [seq[None, ...] for seq in data.sequence]  # (1, T, H, W)

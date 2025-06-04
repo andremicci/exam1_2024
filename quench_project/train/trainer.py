@@ -1,31 +1,35 @@
 
 from utils.model_utils import reset_weights
+import matplotlib.pyplot as plt
 import numpy as np
 import torch
 
 class Results:
-    def __init__(self, train_losses= None, val_losses= None, val_accuracy_per_epoch=None, train_losses_per_batch=None):
+    def __init__(self, train_losses= None, val_losses= None, val_accuracy_per_epoch=None, train_losses_per_batch=None, val_recall_per_epoch=None):
         self.train_losses = train_losses
         self.val_losses =  val_losses
         self.val_accuracy_per_epoch = val_accuracy_per_epoch
+        self.val_recall_per_epoch = val_recall_per_epoch
         self.train_losses_per_batch = train_losses_per_batch
 
     def __repr__(self):
         return f"Results(train_losses={self.train_losses}, val_losses={self.val_losses}, val_accuracy_per_epoch={self.val_accuracy_per_epoch}, train_losses_per_batch={self.train_losses_per_batch})"
     
     def get_train_loss(self):
-        return np.array(self.train_losses)
+        return self.train_losses
     
     def get_val_loss(self):
-        return np.array(self.val_losses)
+        return self.val_losses
     
     def get_val_accuracy(self):
-        return np.array(self.val_accuracy_per_epoch)
+        return self.val_accuracy_per_epoch
     
     def get_train_losses_per_batch(self):
-        return np.array(self.train_losses_per_batch)
+        return self.train_losses_per_batch
     
-
+    def get_val_recall(self):
+        return self.val_recall_per_epoch
+    
 
 class Trainer:
     def __init__(self, model, loss_fn, optimizer,lr, num_epochs, train_loader=None, val_loader=None):
@@ -34,6 +38,7 @@ class Trainer:
         self.loss_fn = loss_fn 
         self.num_epochs = num_epochs
         self.train_loader = train_loader
+        self.batch_size= train_loader.batch_size 
         self.val_loader = val_loader
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.lr=lr
@@ -58,6 +63,7 @@ class TrainerCNN3D(Trainer):
         train_losses = []
         val_losses = []
         val_accuracy_per_epoch = []
+        val_recall_per_epoch = []
         train_losses_per_batch = []   
     
         for epoch in range(self.num_epochs):
@@ -81,8 +87,8 @@ class TrainerCNN3D(Trainer):
                 loss = self.loss_fn(preds, batch_y)  
                 loss.backward()
                 self.optimizer.step()
-                total_train_loss += loss.item() 
-                train_losses_per_batch.append(loss.item())
+                total_train_loss += loss.item()  
+                train_losses_per_batch.append(loss.item()/ batch_x.size(0))  # Store loss per batch
     
             
             # ---- Evaluation ----
@@ -118,14 +124,15 @@ class TrainerCNN3D(Trainer):
             val_precision = 100*(TP / (TP + FP)) if (TP + FP) > 0 else 0
             val_recall = 100*(TP / (TP + FN)) if (TP + FN) > 0 else 0
     
-            print(f"Epoch {epoch+1:02d} | Train Loss: {avg_train_loss:.4f} | val Loss: {avg_val_loss:.4f} | val Acc: {val_accuracy:.2f}% | val Prec: {val_precision:.2f}% | val Recall: {val_recall:.2f}%" )
+            print(f"Epoch {epoch+1:02d} | Train Loss: {avg_train_loss:.4f} | Val Loss: {avg_val_loss:.4f} | Val Acc: {val_accuracy:.2f}% | Val Prec: {val_precision:.2f}% | Val Recall: {val_recall:.2f}%" )
            
             train_losses.append(avg_train_loss)
             val_losses.append(avg_val_loss)
             val_accuracy_per_epoch.append(val_accuracy)
+            val_recall_per_epoch.append(val_recall)
             # Store results in the Results object
         
-        self.Results = Results(train_losses, val_losses, val_accuracy_per_epoch, train_losses_per_batch)
+        self.Results = Results(train_losses, val_losses, val_accuracy_per_epoch, train_losses_per_batch,val_recall_per_epoch)
         torch.cuda.empty_cache()
         return self.Results
             
@@ -179,15 +186,15 @@ class TrainerVAE(Trainer):
 
             avg_loss = total_loss / len(self.train_loader.dataset)
             avg_val_loss = val_loss / len(self.val_loader.dataset)
-            print(f"Epoch {epoch+1}/{self.num_epochs}, Loss: {avg_loss:.6f} | Val Loss: {avg_val_loss:.6f} ")
+            print(f"Epoch {epoch+1}/{self.num_epochs}, Train Loss: {avg_loss:.6f} | Val Loss: {avg_val_loss:.6f} ")
 
             train_losses.append(avg_loss)
             val_losses.append(avg_val_loss)
 
         torch.cuda.empty_cache()
+        self.Results = Results(train_losses=train_losses, val_losses=val_losses)
 
-        return Results(train_losses=train_losses, val_losses=val_losses)
-
+        return self.Results
 
 
 class TrainerConvAE(Trainer):
@@ -233,12 +240,14 @@ class TrainerConvAE(Trainer):
 
             avg_loss = total_loss / len(self.train_loader.dataset)
             avg_val_loss = val_loss / len(self.val_loader.dataset)
-            print(f"Epoch {epoch+1}/{self.num_epochs}, Loss: {avg_loss:.6f} | Val Loss: {avg_val_loss:.6f} ")
+            print(f"Epoch {epoch+1}/{self.num_epochs}, Train Loss: {avg_loss:.6f} | Val Loss: {avg_val_loss:.6f} ")
 
+            
             train_losses.append(avg_loss)
             val_losses.append(avg_val_loss)
 
         torch.cuda.empty_cache()
 
-        return Results(train_losses=train_losses, val_losses=val_losses)
+        self.Results = Results(train_losses=train_losses, val_losses=val_losses)
 
+        return self.Results
