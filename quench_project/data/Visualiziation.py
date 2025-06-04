@@ -124,9 +124,9 @@ def plot_label_distribution_pie(data):
 
     # Migliora l'aspetto dei testi
     for autotext in autotexts:
-        autotext.set(fontsize=14, fontweight='bold', color='white')  # Cambia stile del testo delle percentuali
+        autotext.set(fontsize=14, fontweight='bold', color='white') 
 
-    # Aggiungi numeri al centro delle fette
+    
     for i, count in enumerate(label_counts):
         angle = (wedges[i].theta2 + wedges[i].theta1) / 2
         x = 0.5 * wedges[i].r * np.cos(np.deg2rad(angle))  # Calcola la posizione x del testo
@@ -142,7 +142,5 @@ def plot_label_distribution_pie(data):
                title="Labels", 
                loc="best", 
                fontsize=12)
-
-    # Assicura che il grafico sia rotondo
     plt.axis('equal')
     plt.show()
